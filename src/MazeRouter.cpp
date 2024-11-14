@@ -35,7 +35,7 @@ CostType SimpleGR::routeMaze(Net &net,
     // the sink gcell is found.
     do {
         // YOUR A* search CODE GOES IN HERE
-
+        auto sink_cell = getGCell(snkGCellId);
 
         break;// got to get out of the loop somehow
 
