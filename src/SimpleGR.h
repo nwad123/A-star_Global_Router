@@ -436,7 +436,12 @@ class ManhattanCost
 class SimpleProgRpt
 {
   public:
-    SimpleProgRpt(const std::size_t size_) : checkpoint(NULL), len(0), k(0), j(0), size(static_cast<uint32_t>(size_)) {}
+    SimpleProgRpt(const std::size_t size_) : checkpoint(NULL), len(0), k(0), j(0), size(static_cast<uint32_t>(size_))
+    {
+        int handwritten[] = { 10, 30, 50, 70, 90 };
+        set(handwritten, sizeof(handwritten));
+        std::cout << "scheduled number of workloads : " << size_ << std::endl;
+    }
     SimpleProgRpt(const unsigned size_) : checkpoint(NULL), len(0), k(0), j(0), size(size_)
     {
         int handwritten[] = { 10, 30, 50, 70, 90 };
