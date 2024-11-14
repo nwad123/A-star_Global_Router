@@ -3,6 +3,7 @@
 #include <climits>
 #include <cmath>
 #include <cstdlib>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -15,7 +16,7 @@ void expect(std::string s1, std::string s2)
 {
     if (s1 != s2) {
         std::cout << "Parsing error. Expected `" << s2 << "' but got `" << s1 << "' instead" << std::endl;
-        exit(0);
+        std::terminate();
     }
 }
 
@@ -189,8 +190,8 @@ void SimpleGR::parseInput()
         assert(layer1 <= 2);
         assert(layer2 <= 2);
 
+        // if this is a vertical edges
         if (gridCol1 == gridCol2) {
-            // FIXME: is it a vertical or horizantal edge?
             assert(gridRow1 == gridRow2 + 1 || gridRow1 + 1 == gridRow2);
 
             if (gcellArr3D[layer1 - 1][min(gridRow1, gridRow2)][gridCol1].incY == NULLID) {
@@ -200,31 +201,38 @@ void SimpleGR::parseInput()
                 }
             } else {
                 grEdgeArr[gcellArr3D[layer1 - 1][min(gridRow1, gridRow2)][gridCol1].incY].capacity = newCap;
-                // FIXME: explain this if logic
+
+                // if there was an edge here and the new capacity is zero, remove the path
+                // between the vertical edges
                 if (newCap == 0.) {
                     gcellArr3D[layer1 - 1][min(gridRow1, gridRow2)][gridCol1].incY = NULLID;
                     gcellArr3D[layer1 - 1][max(gridRow1, gridRow2)][gridCol1].decY = NULLID;
                 }
             }
-        } else if (gridRow1 == gridRow2) {
-            // FIXME: is it a vertical or horizantal edge?
+        }
+        // horizontal edges
+        else if (gridRow1 == gridRow2) {
             assert(gridCol1 == gridCol2 + 1 || gridCol1 + 1 == gridCol2);
             if (gcellArr3D[layer1 - 1][gridRow1][min(gridCol1, gridCol2)].incX == NULLID) {
                 if (newCap != 0.) {
                     cout << "Error: Adjusting capacity on a previously non-existing edge." << endl;
-                    exit(0);
+                    std::terminate();
                 }
             } else {
                 grEdgeArr[gcellArr3D[layer1 - 1][gridRow1][min(gridCol1, gridCol2)].incX].capacity = newCap;
-                // FIXME: explain this if logic (same as above)
+
+                // if there was an edge here and the new capacity is zero, remove the path
+                // between the horizontal edges
                 if (newCap == 0.) {
                     gcellArr3D[layer1 - 1][gridRow1][min(gridCol1, gridCol2)].incX = NULLID;
                     gcellArr3D[layer1 - 1][gridRow1][max(gridCol1, gridCol2)].decX = NULLID;
                 }
             }
-        } else {
+        }
+        // we don't care about vertical blockages, as we just assume there are vias available
+        else {
             cout << "Error: Bad capacity adjustment." << endl;
-            exit(0);
+            std::terminate();
         }
     }
 
