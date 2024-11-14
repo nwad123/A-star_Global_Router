@@ -34,10 +34,10 @@ CostType SimpleGR::routeMaze(Net &net,
     // Loop until all "frontiers" in the priority queue are exhausted, or when
     // the sink gcell is found.
     do {
-        // YOUR A* search CODE GOES IN HERE
-        auto sink_cell = getGCell(snkGCellId);
+        auto next_cell_id = priorityQueue.getBestGCell();
+        auto next_neighbors = getGCellNeighbors(next_cell_id);
 
-        break;// got to get out of the loop somehow
+        priorityQueue.rmBestGCell();
 
         // YOUR A* search CODE ENDS HERE
     } while (!priorityQueue.isEmpty());

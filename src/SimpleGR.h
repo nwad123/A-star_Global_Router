@@ -1,6 +1,8 @@
 #ifndef _SIMPLEGR_H_
 #define _SIMPLEGR_H_
 
+#include "detail.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cmath>
@@ -282,6 +284,37 @@ class SimpleGR
     {
         Point gcell = gcellIdtoCoord(gcellId);
         return gcellArr3D[gcell.z][gcell.y][gcell.x];
+    }
+
+    //@brief: get a gcell's neighbors. visits neighbors in the following order:
+    // incx
+    // incy
+    // incz
+    // decx
+    // decy
+    // decz
+    auto getGCellNeighbors(const IdType gcellId) -> detail::fixed_vec<IdType, 6>
+    {
+        const auto cell = getGCell(gcellId);
+        return getGCellNeighbors(cell);
+    }
+
+    auto getGCellNeighbors(const GCell &gcellId) -> detail::fixed_vec<IdType, 6>
+    {
+        detail::fixed_vec<IdType, 6> cells;
+
+        auto check_cell = [&cells](const IdType cell) {
+            if (cell != NULLID) { cells.push_back(cell); }
+        };
+
+        check_cell(gcellId.incX);
+        check_cell(gcellId.incY);
+        check_cell(gcellId.incZ);
+        check_cell(gcellId.decX);
+        check_cell(gcellId.decY);
+        check_cell(gcellId.decZ);
+
+        return cells;
     }
 
     //@brief: get the gcell's ID from a gcell
