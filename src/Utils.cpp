@@ -73,6 +73,7 @@ void SimpleGR::buildGrid(void)
 {
     // Note: Hard coded to work with 2 layers only
     assert(numLayers == 2);
+
     // Note: Hard coded to let 1st layer be horizontal and 2nd layer be vertical
     assert(horizCaps[0]);
     assert(vertCaps[1]);
