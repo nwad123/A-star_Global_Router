@@ -287,24 +287,24 @@ class SimpleGR
     }
 
     //@brief: get a gcell's neighbors. visits neighbors in the following order:
-    // incx
-    // incy
-    // incz
-    // decx
-    // decy
-    // decz
-    auto getGCellNeighbors(const IdType gcellId) -> detail::fixed_vec<IdType, 6>
+    // +x
+    // +y
+    // +z
+    // -x
+    // -y
+    // -z
+    auto getGCellEdges(const IdType gcellId) -> detail::fixed_vec<IdType, 6>
     {
         const auto cell = getGCell(gcellId);
-        return getGCellNeighbors(cell);
+        return getGCellEdges(cell);
     }
 
-    auto getGCellNeighbors(const GCell &gcellId) -> detail::fixed_vec<IdType, 6>
+    auto getGCellEdges(const GCell &gcellId) -> detail::fixed_vec<IdType, 6>
     {
-        detail::fixed_vec<IdType, 6> cells;
+        detail::fixed_vec<IdType, 6> edges;
 
-        auto check_cell = [&cells](const IdType cell) {
-            if (cell != NULLID) { cells.push_back(cell); }
+        auto check_cell = [&edges](const IdType edgeId) -> void {
+            if (edgeId != NULLID) { edges.push_back(edgeId); }
         };
 
         check_cell(gcellId.incX);
@@ -314,7 +314,7 @@ class SimpleGR
         check_cell(gcellId.decY);
         check_cell(gcellId.decZ);
 
-        return cells;
+        return edges;
     }
 
     //@brief: get the gcell's ID from a gcell
@@ -453,9 +453,11 @@ class ManhattanCost
     // Functor API, returns Manhattan distance
     inline CostType operator()(const Point a, const Point b) const
     {
-        return edgeBase
-               * (std::abs(static_cast<CostType>(a.x - b.x)) + std::abs(static_cast<CostType>(a.y - b.y))
-                   + viaFactor * std::abs(static_cast<CostType>(a.z - b.z)));
+        const auto x_cost = std::abs(static_cast<CostType>(a.x) - static_cast<CostType>(b.x));
+        const auto y_cost = std::abs(static_cast<CostType>(a.y) - static_cast<CostType>(b.y));
+        const auto z_cost = std::abs(static_cast<CostType>(a.z) - static_cast<CostType>(b.z)) * viaFactor;
+
+        return edgeBase * (x_cost + y_cost + z_cost);
     }
 
   private:

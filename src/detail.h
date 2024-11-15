@@ -19,15 +19,25 @@ struct fixed_vec
         using difference_type = std::ptrdiff_t;
         using value_type = dT;
 
+        using iterator_category = std::bidirectional_iterator_tag;
+        using pointer = value_type *;
+        using reference = value_type &;
+
+        fixed_vec *vec{ nullptr };
         index_type index{ 0 };
-        fixed_vec &vec;
 
-        iter(fixed_vec &vec) : vec(vec) {}
-        iter(fixed_vec &vec, index_type index) : vec(vec), index(index) {}
+        iter() = default;
+        iter(fixed_vec &vec) : vec(&vec) {}
+        iter(fixed_vec &vec, index_type index) : vec(&vec), index(index) {}
 
-        value_type operator*() const { return vec.values_.at(index); }
+        reference operator*() const { return vec->values_.at(index); }
+        reference operator*() { return vec->values_.at(index); }
 
-        iter &operator++() { index++; }
+        iter &operator++()
+        {
+            index++;
+            return *this;
+        }
 
         iter operator++(int)
         {
@@ -36,7 +46,11 @@ struct fixed_vec
             return tmp;
         }
 
-        iter &operator--() { index--; }
+        iter &operator--()
+        {
+            index--;
+            return *this;
+        }
 
         iter operator--(int)
         {
@@ -45,7 +59,8 @@ struct fixed_vec
             return tmp;
         }
 
-        bool operator==(const iter &other) const { return index == other.index; }
+        bool operator==(const iter &other) const { return index == other.index && vec == other.vec; }
+        bool operator!=(const iter &other) const { return index != other.index || vec != other.vec; }
     };
 
     auto begin() -> iter { return iter(*this); }
@@ -55,10 +70,12 @@ struct fixed_vec
     auto push_back(dT val)
     {
         if (size() < Cap) {
-            size_ += 1;
             values_.at(size_) = val;
+            size_ += 1;
         }
     }
+
+    auto at(const index_type index) -> dT & { return values_.at(index); }
 };
 
 }// namespace detail

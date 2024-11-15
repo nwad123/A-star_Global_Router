@@ -7,15 +7,13 @@ BUILD_DIR ?= $(CURDIR)/build
 
 .PHONY : build
 build:
-	mkdir -p ${BUILD_DIR}
-	cd ${BUILD_DIR}; cmake ..
-	cmake --build ${BUILD_DIR} 
-
-.PHONY : release
-release:
-	mkdir -p ${BUILD_DIR}
-	cd ${BUILD_DIR}; cmake -DCMAKE_BUILD_TYPE=Release ..
-	cmake --build ${BUILD_DIR} 
+	@echo "🟢 Updating CMake build files..."
+	@mkdir -p ${BUILD_DIR}
+	@cd ${BUILD_DIR}; cmake ..
+	@echo "🟢 Building project..."
+	@cmake --build ${BUILD_DIR} 
+	@echo
+	@date +"🟢 %T - Build finished"
 
 .PHONY : clean
 clean:
