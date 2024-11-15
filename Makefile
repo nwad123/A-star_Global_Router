@@ -7,17 +7,18 @@ BUILD_DIR ?= $(CURDIR)/build
 
 .PHONY : build
 build:
-	@echo "🟢 Updating CMake build files..."
+	@echo "🟡 Updating CMake build files..."
 	@mkdir -p ${BUILD_DIR}
 	@cd ${BUILD_DIR}; cmake ..
-	@echo "🟢 Building project..."
+	@echo "🟡 Building project..."
 	@cmake --build ${BUILD_DIR} 
-	@echo
 	@date +"🟢 %T - Build finished"
+	@echo
 
 .PHONY : clean
 clean:
-	rm -r ${BUILD_DIR}
+	@echo "🟧 Cleaning build files in ${BUILD_DIR}..."
+	@rm -r ${BUILD_DIR}
 
 .PHONY : bundle
 bundle:

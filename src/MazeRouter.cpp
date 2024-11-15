@@ -45,12 +45,13 @@ CostType SimpleGR::routeMaze(Net &net,
     ManhattanCost &manhattanDistance = ManhattanCost::getFunc();
 
     //@brief checks if a cell is in the bounding box
+    //  Note: this function ignores the z-boundary, as when `routeMaze` is called
+    //  from SimpleGR `0` is always passed for the bot left and top right coord.
+    //
+    //@param cell Checks if `cell` is in the bounding box
+    //@return Whether or not `cell` is in the bounding box
     auto in_bounding_box = [&botleft, &topright](const Point &cell) {
-        // clang-format off
-        return (botleft.x <= cell.x && cell.x <= topright.x) 
-               && (botleft.y <= cell.y && cell.y <= topright.y)
-               && (botleft.z <= cell.z && cell.z <= topright.z);
-        // clang-format on
+        return (botleft.x <= cell.x && cell.x <= topright.x) && (botleft.y <= cell.y && cell.y <= topright.y);
     };
 
     //@brief given a GCell and an edgeId returns the connecting GCell
