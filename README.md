@@ -87,7 +87,33 @@ shown below:
 
 ## Output
 
-TODO: describe output from SimpleGR here
+The output that is directed to `stdout` provides stats about the solution that was generated:
+
+```
+GR Stats :
+ Final nets routed 76927 (100%)
+ Final total length for routed nets 648894
+ Final total number of vias 109698
+ Final total wire length 977988
+ Final number of overflowing edges is 0 (0%)
+ Final max overflow is 0
+ Final total overflow is 0
+ Final avg overflow is 0
+ Final CPU time: 0.483391 seconds
+```
+
+In detail, here are the stats produced:
+
+1. Final nets routed - the total number of wires routed on the chip
+
+2. Final total length for routed nets - the length of all the wires that were routed
+
+3. Final total number of vias - the number of vertical connections from one layer to the next 
+
+4. \*overflow\* - Statistics about the overflow of the solution, see the lab document for more
+    details on this.
+
+5. Final CPU time - the run time of the program, typically lower is better.
 
 ## Answers to Lab Questions
 
