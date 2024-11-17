@@ -1,7 +1,7 @@
 # Build the global router
 
 # Command for continuous build: (TO AUTOMATE)
-# fswatch -0 -r -l 5 -e "build." . | xargs -0 -n 1 -I {} "make"
+# fswatch -0 -r -l 5 -o ./src/* | xargs -0 -n 1 -I {} "make"
 
 BUILD_DIR ?= $(CURDIR)/build
 
