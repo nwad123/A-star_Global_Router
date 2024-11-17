@@ -6,9 +6,10 @@ Notes on this project:
 
 1. This was written for a project for my VLSI Design Automation class at Utah State.
 
-2. Most of the code was pre-provided to me, I wrote the A\* search logic in the [MazeRouter](src/MazeRouter.cpp)
-    file, and I also wrote the fixed vector class in the [detail header](src/detail.h). I adjusted a
-    few functions in [SimpleGR](src/SimpleGR.h), but most of it is unchanged.
+2. Most of the code was pre-provided to me, I wrote the [A\*](https://en.wikipedia.org/wiki/A*_search_algorithm)
+    search logic in the [MazeRouter](src/MazeRouter.cpp) file, and I also wrote the fixed vector
+    class in the [detail header](src/detail.h). I adjusted a few functions in [SimpleGR](src/SimpleGR.h),
+    but most of it is unchanged.
 
 3. Because this was an assignment and we were supposed to contain most of our changes to MazeRouter.cpp,
     I used a lot of lambda functions to bundle up functionality in a single function. I don't know if this a good practice,
@@ -17,7 +18,14 @@ Notes on this project:
 
 ## Purpose
 
-The purpose of this lab was to implement a 3-dimensional A\*.
+The purpose of this lab was to implement a 3-dimensional A\* search algorithm to solve chip routing
+for a given chip layout. *Chip routing* is the process of determining the routes of connecting wires
+through an integrated circuit. Integrated circuits (chips) are often designed by splitting the chip
+into smaller blocks, then placing the blocks on the chip (using some kind of packing algorithm), and
+then by connecting all the blocks. This program implements the third step of the process, and determines
+the best routes for all the internal connection of the chip given a predetermined layout.
+
+More information about the lab can be found in the [lab document](./lab_instructions.pdf).
 
 ## Installation
 
