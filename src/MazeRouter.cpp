@@ -108,6 +108,16 @@ CostType SimpleGR::routeMaze(Net &net,
         return edge;
     };
 
+    //@brief checks if an edge is viable (checks overflow)
+    auto is_valid_edge = [this, &allowOverflow](const IdType edge_id) -> bool {
+        const auto &edge = grEdgeArr[edge_id];
+        const CapType demand = (edge.type == VIA) ? 0 : minWidths[edge.layer] + minSpacings[edge.layer];
+
+        const auto wont_overflow = (edge.usage + demand) <= edge.capacity;
+
+        return wont_overflow or allowOverflow;
+    };
+
     // A* search kernel
     // Loop until all "frontiers" in the priority queue are exhausted, or when
     // the sink gcell is found.
@@ -129,6 +139,15 @@ CostType SimpleGR::routeMaze(Net &net,
         auto edges = getGCellEdges(this_cell_id);
 
         for (const auto &edgeId : edges) {
+            // if traversing this edge would cause overflow and `allowOverflow = false`
+            // then skip this edge
+            if (!is_valid_edge(edgeId)) {
+#ifndef NDEBUG
+                std::cout << "\tSkipping edge " << edgeId << " because traversing it would cause overflow\n";
+#endif
+                continue;
+            }
+
             // find the adjacent cell
             const auto &this_cell = getGCell(this_cell_id);
             const GCell &connecting_cell = get_connecting_cell(this_cell, edgeId);
