@@ -6,14 +6,18 @@ Notes on this project:
 
 1. This was written for a project for my VLSI Design Automation class at Utah State.
 
-2. Most of the code was preprovided to me, I wrote the logic in the [MazeRouter](src/MazeRouter.cpp)
+2. Most of the code was pre-provided to me, I wrote the A\* search logic in the [MazeRouter](src/MazeRouter.cpp)
     file, and I also wrote the fixed vector class in the [detail header](src/detail.h). I adjusted a
     few functions in [SimpleGR](src/SimpleGR.h), but most of it is unchanged.
 
 3. Because this was an assignment and we were supposed to contain most of our changes to MazeRouter.cpp,
-    I used a lot of lambda functions to bundle up functionality. I don't know if this a good practice,
+    I used a lot of lambda functions to bundle up functionality in a single function. I don't know if this a good practice,
     and it makes the `routeMaze` function pretty long, but it kept most of my changes inside of the
     MazeRouter.cpp file.
+
+## Purpose
+
+The purpose of this lab was to implement a 3-dimensional A\*.
 
 ## Installation
 
