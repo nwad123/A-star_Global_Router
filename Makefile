@@ -22,4 +22,7 @@ clean:
 
 .PHONY : bundle
 bundle:
-	cd ..; tar  --exclude='./.git/' --exclude="./.cache/" --exclude="./goldenRef" --exclude="./benchmarks" --exclude="./build/" -cvzf gr.tar.gz -C ${CURDIR} .
+	cd ..; tar  --exclude='./.git/' --exclude="./.cache/" --exclude="./goldenRef" \
+		--exclude="./benchmarks" --exclude="./build/" --exclude="./cmake" \
+		--exclude=".gitignore" \
+		-cvzf gr.tar.gz -C ${CURDIR} .
