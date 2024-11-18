@@ -11,10 +11,11 @@ Notes on this project:
     class in the [detail header](src/detail.h). I adjusted a few functions in [SimpleGR](src/SimpleGR.h),
     but most of it is unchanged.
 
-3. Because this was an assignment and we were supposed to contain most of our changes to MazeRouter.cpp,
-    I used a lot of lambda functions to bundle up functionality in a single function. I don't know if this a good practice,
-    and it makes the `routeMaze` function pretty long, but it kept most of my changes inside of the
-    MazeRouter.cpp file.
+3. Because this was an assignment and we were supposed to contain most of our code to the `routeMaze` function in
+   MazeRouter.cpp, I wrote a lot of lambda functions inside of the `routeMaze` function to keep my logic local to
+   the `routeMaze` function. I think that this approach makes the code fairly readable as each operation in the
+   A\* algorithm has been given a named lambda to go with it. A drawback of this approach is that none of the
+   functions in the A\* algorithm are available for other code sources to use.
 
 ## Purpose
 
