@@ -69,9 +69,9 @@ void SimpleGR::routeFlatNets(bool allowOverflow, const EdgeCost &func)
         if (net.routed) continue;
 
         if (params.verbose) {
-            printf("routing flat GR net Id %d. ", net.id);
-            printf("(%d, %d, %d) ", net.gCellOne.x, net.gCellOne.y, net.gCellOne.z);
-            printf("(%d, %d, %d) ", net.gCellTwo.x, net.gCellTwo.y, net.gCellTwo.z);
+            ::printf("routing flat GR net Id %d. ", net.id);
+            ::printf("(%d, %d, %d) ", net.gCellOne.x, net.gCellOne.y, net.gCellOne.z);
+            ::printf("(%d, %d, %d) ", net.gCellTwo.x, net.gCellTwo.y, net.gCellTwo.z);
         }
         // call router engine to route net with bounding box constraint
         CostType cost = routeNet(net, allowOverflow, bboxConstrain, func);
