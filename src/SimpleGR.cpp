@@ -100,8 +100,10 @@ CostType SimpleGR::routeNet(Net &net, bool allowOverflow, bool bboxConstrain, co
 {
     using namespace std;
 
-    vector<Edge *> routePath;
+    thread_local vector<Edge *> routePath{};
     CostType totalCost;
+
+    routePath.clear();
 
     if (bboxConstrain) {
         const Point botleft(min(net.gCellOne.x, net.gCellTwo.x), min(net.gCellOne.y, net.gCellTwo.y), 0);
