@@ -5,8 +5,6 @@
 
 #include "SimpleGR.h"
 
-#include <iomanip>
-
 ///////////////////////////////////////////////////////////////////////////////
 // Implement an A* search based maze routing algorithm
 // and a corresponding back-trace procedure
@@ -27,7 +25,7 @@ CostType SimpleGR::routeMaze(Net &net,
 
     // Get a reference to the source cell (in order to get more information
     // about the source cell)
-    const auto &source_cell = getGCell(dest_cell_id);
+    const auto &dest_cell = getGCell(dest_cell_id);
 
     // the priority queue keeps track of which cells are visited
     // insert the source cell to the priority queue to indicate that it has been visited
@@ -147,7 +145,6 @@ CostType SimpleGR::routeMaze(Net &net,
             // get references to the cell connected to the current cell by the current edge
             const auto &this_cell = getGCell(this_cell_id);
             const GCell &connecting_cell = get_connecting_cell(this_cell, edgeId);
-            const auto connecting_cell_id = getGCellId(connecting_cell);
 
             // if the cell is out of the bounding box we can skip this loop
             if (!in_bounding_box(connecting_cell)) { continue; }
@@ -155,14 +152,24 @@ CostType SimpleGR::routeMaze(Net &net,
             // calculate the two types of cost
             // manh_cost : heuristic cost between the connecting cell and the destination
             // edge_cost : the cost from the source cell to the connecting cell
-            const auto manh_cost = manhattanDistance(connecting_cell, source_cell);
+            const auto manh_cost = manhattanDistance(connecting_cell, dest_cell);
             const auto path_cost = edge_cost(edgeId) + this_cell_data.pathCost;
 
             // Calculate the total cost as detailed in the PQueue.setGCellCost function
             const auto total_cost = manh_cost + path_cost;
 
+            // get the connecting cell id to insert it into the priority queue
+            const auto connecting_cell_id = getGCellId(connecting_cell);
+
             // insert the neighbor cell into the priority queue
-            priorityQueue.setGCellCost(connecting_cell_id, manh_cost, total_cost, this_cell_id);
+            if (!priorityQueue.isGCellVsted(connecting_cell_id)) {
+                priorityQueue.setGCellCost(connecting_cell_id, manh_cost, total_cost, this_cell_id);
+            } else {
+                const auto old_cost = priorityQueue.getGCellData(connecting_cell_id).totalCost;
+                if (old_cost > total_cost) {
+                    priorityQueue.setGCellCost(connecting_cell_id, manh_cost, total_cost, this_cell_id);
+                }
+            }
         }
 
     } while (!priorityQueue.isEmpty());
@@ -170,8 +177,16 @@ CostType SimpleGR::routeMaze(Net &net,
     // now backtrace and build up the path, if we found one
     // back-track from sink to source, and fill up 'path' vector with all the edges that are traversed
     if (priorityQueue.isGCellVsted(dest_cell_id)) {
-        // YOUR backtrace CODE GOES IN HERE
         auto current_id = dest_cell_id;
+
+        // pre-allocate estimated space for the route path in order to minimize allocations
+        {
+            const auto estimated_size = manhattanDistance(getGCell(source_cell_id), getGCell(dest_cell_id));
+            path.reserve(static_cast<std::size_t>(estimated_size) * 2);
+        }
+
+        // clear the path in case it was already used
+        path.clear();
 
         while (current_id != source_cell_id) {
             const auto &current_node = priorityQueue.getGCellData(current_id);
