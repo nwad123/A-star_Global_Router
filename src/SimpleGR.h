@@ -206,6 +206,7 @@ class PQueue
     // The following APIs will be used extensively by the A*search
     // Returns the gcell ID that currently has the minimum cost
     IdType getBestGCell(void) const;
+    IdType getBestGCell(const double randomPercent) const;
     // Remove the minimum cost gcell from priority queue
     void rmBestGCell(void);
     // Update the cost of a gcell

@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
+#include <random>
 #include <string>
 #include <sys/resource.h>
 #include <vector>
@@ -165,10 +166,29 @@ void SimpleGR::buildGrid(void)
 ///////////////////////////////////////////////////////////////////////////////
 
 // Return the element at the top of the priority queue
+IdType PQueue::getBestGCell(const double randomPercent) const
+{
+    assert(!isEmpty());
+
+    // Create random number generator
+    thread_local std::random_device rd;
+    thread_local std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.0, 100.0);
+
+    // Determine selection strategy
+    if (dis(gen) < randomPercent) {
+        // Random selection
+        std::uniform_int_distribution<> index_dis(0, static_cast<int>(heap.size() - 1));
+        return heap[static_cast<std::size_t>(index_dis(gen))];
+    } else {
+        // Always return front value
+        return heap.front();
+    }
+}
+
 IdType PQueue::getBestGCell(void) const
 {
     assert(!isEmpty());
-    // printf("Getting the best gcell: %d\n", heap.front());
     return heap.front();
 }
 
