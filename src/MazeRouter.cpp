@@ -126,7 +126,7 @@ CostType SimpleGR::routeMaze(Net &net,
     // current location, but this implmentation inserts all the next possible locations from
     // current location
     do {
-        const auto this_cell_id = allow_overflow ? priorityQueue.getBestGCell(0.95) : priorityQueue.getBestGCell();
+        const auto this_cell_id = priorityQueue.getBestGCell();
         const auto this_cell_data = priorityQueue.getGCellData(this_cell_id);
 
         priorityQueue.rmBestGCell();
